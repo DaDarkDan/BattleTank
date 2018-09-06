@@ -16,10 +16,13 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-	void aimtAt(FVector hitLocation );
+	void AimAt(FVector hitLocation);
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void setBarrel(UStaticMeshComponent* barrel);
+		void SetBarrel(UStaticMeshComponent* barrel);
+
+	UPROPERTY(EditAnywhere, Category = Firing)
+		float launchSpeed = 100000.0f; //TODO find sensible default
 
 protected:
 	UTankAimingComponent * tankAimingComp = nullptr;
