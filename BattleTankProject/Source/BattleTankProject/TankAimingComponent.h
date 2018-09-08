@@ -23,6 +23,8 @@ public:
 	void SetBarrel(UTankBarrel* barrel);
 	void SetTurret(UTankTurret* turret);
 
+	virtual void BeginPlay() override;
+
 private:
 	UTankBarrel* barrel = nullptr;
 	UTankTurret* turret = nullptr;

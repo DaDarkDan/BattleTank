@@ -16,8 +16,15 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
+void UTankAimingComponent::BeginPlay() {
+	Super::BeginPlay();
+}
+
+
 void UTankAimingComponent::AimAt(FVector hitLocation, float launchSpeed) {
-	if(!barrel || !turret) { return; }
+	if(!barrel || !turret) { 
+		UE_LOG(LogTemp, Warning, TEXT("ERROR"));
+		return; }
 
 	FVector outLaunchVelocity;
 	FVector startLocation = barrel->GetSocketLocation(FName("ProjectileLaunchSocket"));
