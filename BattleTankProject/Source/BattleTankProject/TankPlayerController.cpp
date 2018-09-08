@@ -21,7 +21,6 @@ void ATankPlayerController::BeginPlay() {
 	} else {
 		UE_LOG(LogTemp, Warning, TEXT("PlayerController possessing %s"), *controlledTank->GetName());
 	}	
-
 }
 
 void ATankPlayerController::Tick(float DeltaSeconds) {
@@ -38,8 +37,6 @@ void ATankPlayerController::AimTowardsCrosshair() {
 	if(GetSightRayHitLocation(hitLocation)) {
 		GetControlledTank()->AimAt(hitLocation);
 	}
-
-
 }
 
 //Get world location of linetrace through crosshair, true if it hits the landscape

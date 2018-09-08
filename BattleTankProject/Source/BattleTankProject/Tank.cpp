@@ -33,6 +33,11 @@ void ATank::AimAt(FVector hitLocation) {
 	tankAimingComp->AimAt(hitLocation, launchSpeed);
 }
 
+void ATank::Fire() {
+	UE_LOG(LogTemp, Warning, TEXT("Fire() called"));
+}
+
+
 void ATank::SetBarrel(UTankBarrel* barrel) {
 	tankAimingComp->SetBarrel(barrel);
 }

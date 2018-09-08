@@ -18,17 +18,10 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 	void AimAt(FVector hitLocation, float launchSpeed);
 
 	void SetBarrel(UTankBarrel* barrel);
 	void SetTurret(UTankTurret* turret);
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
 
 private:
 	UTankBarrel* barrel = nullptr;

@@ -29,14 +29,17 @@ public:
 		void SetTurret(UTankTurret* turret);
 
 	UPROPERTY(EditAnywhere, Category = Firing)
-		float launchSpeed = 100000.0f; //TODO find sensible default
+		float launchSpeed = 4000;
+
+	UFUNCTION(BlueprintCallable, Category = Firing)
+		void Fire();
 
 protected:
 	UTankAimingComponent * tankAimingComp = nullptr;
 
 private:	
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	virtual void BeginPlay() override; 
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;	
