@@ -6,21 +6,19 @@
 #include "Components/StaticMeshComponent.h"
 #include "TankBarrel.generated.h"
 
-/**
- * 
- */
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent), hidecategories = ("Collision"))
 class BATTLETANKPROJECT_API UTankBarrel : public UStaticMeshComponent
 {
 	GENERATED_BODY()
 	
 public:
-
-	void Elevate(float DegreesPerSecond);
+	// -1 is max downward speed and +1 is max up movement
+	void Elevate(float relativeSpeed);
 	
 private:
 	UPROPERTY(EditAnywhere, Category = Setup)
-		float maxDegreesPerSecond = 20;
+		float maxElevationDegreesPerSecond = 10;
 	UPROPERTY(EditAnywhere, Category = Setup)
 		float maxElevationDegrees = 40;
 	UPROPERTY(EditAnywhere, Category = Setup)

@@ -3,6 +3,7 @@
 #include "TankAimingComponent.h"
 #include "Engine/Classes/Kismet/GameplayStatics.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 
 
 // Sets default values for this component's properties
@@ -38,7 +39,6 @@ void UTankAimingComponent::AimAt(FVector hitLocation, float launchSpeed) {
 
 	FVector outLaunchVelocity;
 	FVector startLocation = barrel->GetSocketLocation(FName("ProjectileLaunchSocket"));
-	FCollisionResponseParams collisionResponseParams;
 	//Calculate the outLaunchVelocity
 	if(UGameplayStatics::SuggestProjectileVelocity(
 		this,
@@ -47,34 +47,43 @@ void UTankAimingComponent::AimAt(FVector hitLocation, float launchSpeed) {
 		hitLocation,
 		launchSpeed,
 		false,
-		0,
-		0,
+		0.f,
+		0.f,
 		ESuggestProjVelocityTraceOption::DoNotTrace,
-		collisionResponseParams,
+		FCollisionResponseParams::DefaultResponseParam,
 		TArray<AActor*>(),
 		true
 		)) {
 		auto aimDirection = outLaunchVelocity.GetSafeNormal();
-		UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetOwner()->GetName(), *aimDirection.ToString());
 		MoveBarrelTowards(aimDirection);
-	};
+		MoveTurretTowards(aimDirection);
+		//UE_LOG(LogTemp, Warning, TEXT("%f: aim solution found at %s"), GetWorld()->GetTimeSeconds(), *aimDirection.ToString());
+	} else {
+		//UE_LOG(LogTemp, Warning, TEXT("%f: no aim solution found"), GetWorld()->GetTimeSeconds());
+	}
 
 }
 
 
 void UTankAimingComponent::SetBarrel(UTankBarrel* barrel) {
+	if(!barrel) { return; }
 	this->barrel = barrel;
 }
 
+void UTankAimingComponent::SetTurret(UTankTurret* turret) {
+	if(!turret) { return; }
+	this->turret = turret;
+}
+
+
 void UTankAimingComponent::MoveBarrelTowards(FVector aimDirection) {
-	FRotator aimRotation;
-	//calculate difference between barrel rotation and aimDirection
-	FRotator barrelRotation = barrel->GetForwardVector().Rotation();
-	FRotator aimAtRotation = aimDirection.Rotation();
-	FRotator deltaRotation = aimAtRotation - barrelRotation;
+	barrel->Elevate(CalculateRotationDelta(aimDirection, turret->GetForwardVector().Rotation()).Pitch);
+}
 
-	//Cast<UTankBarrel*>
-	
-	barrel->Elevate(5); //TODO remove magic number
+void UTankAimingComponent::MoveTurretTowards(FVector aimDirection) {
+	turret->Rotate(CalculateRotationDelta(aimDirection, turret->GetForwardVector().Rotation()).Yaw);
+}
 
+FRotator UTankAimingComponent::CalculateRotationDelta(FVector aimDirection, FRotator meshRotation) {
+	return aimDirection.Rotation() - meshRotation;
 }
