@@ -27,9 +27,6 @@ void AProjectile::Tick(float DeltaTime)
 }
 
 void AProjectile::LaunchProjectile(float speed) {
-	if(projectileMovementComp != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("Projectile launched with %f"), speed);
-	}
 	projectileMovementComp->SetVelocityInLocalSpace(FVector::ForwardVector * speed);
 	projectileMovementComp->Activate();
 }
