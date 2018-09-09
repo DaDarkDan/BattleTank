@@ -36,13 +36,13 @@ void ATank::AimAt(FVector hitLocation) {
 }
 
 void ATank::Fire() {
-	UE_LOG(LogTemp, Warning, TEXT("Fire() called"));
 
-	if(!barrel) { 
-		return; 
-	} else {
+	bool isReloaded = (FPlatformTime::Seconds() - lastFiringTime) > reloadTimeInSeconds;
+	if(barrel && isReloaded) { 
 		//spawn projectile at socket of barrel
-		GetWorld()->SpawnActor<AProjectile>(projectileBP, barrel->GetSocketLocation(FName("ProjectileLaunchSocket")), barrel->GetSocketRotation(FName("ProjectileLaunchSocket")));
+		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(projectileBP, barrel->GetSocketLocation(FName("ProjectileLaunchSocket")), barrel->GetSocketRotation(FName("ProjectileLaunchSocket")));
+		projectile->LaunchProjectile(launchSpeed);
+		lastFiringTime = FPlatformTime::Seconds();
 	}
 
 }
