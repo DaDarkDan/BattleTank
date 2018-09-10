@@ -10,17 +10,7 @@ ATank * ATankPlayerController::GetControlledTank() const {
 }
 
 void ATankPlayerController::BeginPlay() {
-	Super::BeginPlay();
-
-	UE_LOG(LogTemp, Warning, TEXT("PlayerController Begin Play"));
-
-	ATank* controlledTank = GetControlledTank();
-
-	if(!controlledTank) {
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController not possessing a Tank"));
-	} else {
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController possessing %s"), *controlledTank->GetName());
-	}	
+	Super::BeginPlay();	
 }
 
 void ATankPlayerController::Tick(float DeltaSeconds) {

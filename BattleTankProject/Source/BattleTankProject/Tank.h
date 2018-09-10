@@ -10,6 +10,7 @@
 class UTankBarrel;
 class UTankTurret;
 class UTankAimingComponent;
+class UTankMovementComponent;
 class AProjectile;
 
 UCLASS()
@@ -36,7 +37,10 @@ public:
 		void Fire();
 
 protected:
-	UTankAimingComponent * tankAimingComp = nullptr;
+	UTankAimingComponent* tankAimingComp = nullptr;
+
+	UPROPERTY(BluePrintReadOnly)
+		UTankMovementComponent* tankMovementComp = nullptr;
 
 private:	
 	// Called when the game starts or when spawned
