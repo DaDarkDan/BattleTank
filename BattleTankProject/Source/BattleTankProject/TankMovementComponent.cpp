@@ -10,7 +10,6 @@ void UTankMovementComponent::Initialize(UTankTrack* leftTrack, UTankTrack* right
 
 }
 
-//gets input from Navmesh which gets input from MoveToActor() in AIcontroller
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) {
 	FVector tankForwardVector = GetOwner()->GetActorForwardVector().GetSafeNormal();
 	FVector aiForwardIntention = MoveVelocity.GetSafeNormal();
@@ -37,7 +36,7 @@ void UTankMovementComponent::IntendMoveForward(float controlThrow) {
 void UTankMovementComponent::IntendTurnRight(float controlThrow) {
 	if(!leftTrack || !rightTrack) { return; }
 
-	float sidewardFactor = 3;
+	float sidewardFactor = 3; //TODO adjust (not in the course)
 	leftTrack->SetThrottle(sidewardFactor*controlThrow);
 	rightTrack->SetThrottle(sidewardFactor *-controlThrow);
 
