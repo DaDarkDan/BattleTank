@@ -15,8 +15,9 @@ void ATankAIController::Tick(float DeltaTime) {
 	ATank* playerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 
 	if(playerTank) {
-		//move towards player
+		//move towards player (passes input to pathfinding logic)
 		MoveToActor(playerTank, acceptanceRadius); //TODO check radius is in cm
+		UE_LOG(LogTemp, Warning, TEXT("MoveToActor called to position: %s"), *playerTank->GetActorLocation().ToString());
 
 		//Aim towards the player
 		controlledTank->AimAt(playerTank->GetActorLocation());

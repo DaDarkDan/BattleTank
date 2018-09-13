@@ -6,20 +6,26 @@
 void UTankMovementComponent::Initialize(UTankTrack* leftTrack, UTankTrack* rightTrack) {
 	this->leftTrack = leftTrack;
 	this->rightTrack = rightTrack;
+	UE_LOG(LogTemp, Warning, TEXT("Tankmovementcomp for %s initialized"), *GetOwner()->GetName());
+
 }
 
+//gets input from Navmesh which gets input from MoveToActor() in AIcontroller
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) {
 	FVector tankForwardVector = GetOwner()->GetActorForwardVector().GetSafeNormal();
 	FVector aiForwardIntention = MoveVelocity.GetSafeNormal();
 	
 	float forwardThrow = FVector::DotProduct(tankForwardVector, aiForwardIntention);
+	IntendMoveForward(forwardThrow);
+
+	float rightThrow = FVector::CrossProduct(aiForwardIntention, tankForwardVector).Z;
+	IntendTurnRight(rightThrow);
 	
-	intendMoveForward(forwardThrow);
-	UE_LOG(LogTemp, Warning, TEXT("%f"), forwardThrow);
+	UE_LOG(LogTemp, Warning, TEXT("%f"), rightThrow);
 }
 
 
-void UTankMovementComponent::intendMoveForward(float controlThrow) {
+void UTankMovementComponent::IntendMoveForward(float controlThrow) {
 	if(!leftTrack || !rightTrack) { return; }
 
 	leftTrack->SetThrottle(controlThrow);
@@ -28,11 +34,12 @@ void UTankMovementComponent::intendMoveForward(float controlThrow) {
 	//TODO preventdouble speed due to dual control
 }
 
-void UTankMovementComponent::intendTurnRight(float controlThrow) {
+void UTankMovementComponent::IntendTurnRight(float controlThrow) {
 	if(!leftTrack || !rightTrack) { return; }
 
-	leftTrack->SetThrottle(controlThrow);
-	rightTrack->SetThrottle(-controlThrow);
+	float sidewardFactor = 3;
+	leftTrack->SetThrottle(sidewardFactor*controlThrow);
+	rightTrack->SetThrottle(sidewardFactor *-controlThrow);
 
 	//TODO preventdouble speed due to dual control
 }

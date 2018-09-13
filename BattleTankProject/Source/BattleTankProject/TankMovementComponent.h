@@ -22,10 +22,10 @@ public:
 		void Initialize(UTankTrack* leftTrack, UTankTrack* rightTrack);
 
 	UFUNCTION(BluePrintCallable, Category = Input)
-		void intendMoveForward(float controlThrow);	
+		void IntendMoveForward(float controlThrow);	
 
 	UFUNCTION(BluePrintCallable, Category = Input)
-		void intendTurnRight(float controlThrow);
+		void IntendTurnRight(float controlThrow);
 
 	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 
