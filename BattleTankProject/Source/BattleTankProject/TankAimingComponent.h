@@ -6,6 +6,14 @@
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
+//enum for aiming state
+UENUM()
+enum class EFiringState : uint8 {
+	Locked,
+	Aiming,
+	Reloading
+};
+
 class UTankBarrel;
 class UTankTurret;
 
@@ -20,11 +28,12 @@ public:
 
 	void AimAt(FVector hitLocation, float launchSpeed);
 
-	void SetBarrel(UTankBarrel* barrel);
-	void SetTurret(UTankTurret* turret);
+	UFUNCTION(BluePrintCallable, Category = "Setup")
+		void Initialize(UTankBarrel* barrel, UTankTurret* turret);
 
-	virtual void BeginPlay() override;
-
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+		EFiringState firingState = EFiringState::Locked; //in protected because BP is subclass
 private:
 	UTankBarrel* barrel = nullptr;
 	UTankTurret* turret = nullptr;

@@ -6,7 +6,7 @@
 void UTankMovementComponent::Initialize(UTankTrack* leftTrack, UTankTrack* rightTrack) {
 	this->leftTrack = leftTrack;
 	this->rightTrack = rightTrack;
-	UE_LOG(LogTemp, Warning, TEXT("Tankmovementcomp for %s initialized"), *GetOwner()->GetName());
+	UE_LOG(LogTemp, Warning, TEXT("Tank movement comp for %s initialized"), *GetOwner()->GetName());
 
 }
 

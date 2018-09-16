@@ -16,8 +16,10 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::BeginPlay() {
-	Super::BeginPlay();
+void UTankAimingComponent::Initialize(UTankBarrel* barrel, UTankTurret* turret) {
+	this->barrel = barrel;
+	this->turret = turret;
+	UE_LOG(LogTemp, Warning, TEXT("Tank aiming comp for %s initialized"), *GetOwner()->GetName());
 }
 
 
@@ -51,23 +53,13 @@ void UTankAimingComponent::AimAt(FVector hitLocation, float launchSpeed) {
 
 }
 
-
-void UTankAimingComponent::SetBarrel(UTankBarrel* barrel) {
-	if(!barrel) { return; }
-	this->barrel = barrel;
-}
-
-void UTankAimingComponent::SetTurret(UTankTurret* turret) {
-	if(!turret) { return; }
-	this->turret = turret;
-}
-
-
 void UTankAimingComponent::MoveBarrelTowards(FVector aimDirection) {
+	if(!barrel || !turret) { return; }
 	barrel->Elevate(CalculateRotationDelta(aimDirection, turret->GetForwardVector().Rotation()).Pitch);
 }
 
 void UTankAimingComponent::MoveTurretTowards(FVector aimDirection) {
+	if(!turret) { return; }
 	turret->Rotate(CalculateRotationDelta(aimDirection, turret->GetForwardVector().Rotation()).Yaw);
 }
 
