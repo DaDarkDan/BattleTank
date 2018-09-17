@@ -5,7 +5,6 @@
 #include "TankTurret.h"
 #include "Projectile.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "Engine/World.h"
 
 
@@ -18,18 +17,21 @@ ATank::ATank()
 
 void ATank::BeginPlay() {
 	Super::BeginPlay(); //NEEDED TO CALL BEGINPLAY IN BLUEPRINT!!!
+
+	tankAimingComp = FindComponentByClass<UTankAimingComponent>();
 }
 
 
 void ATank::AimAt(FVector hitLocation) {
-	if(!tankAimingComp) { return; }
+	if(!ensure(tankAimingComp)) { return; }
+
 	tankAimingComp->AimAt(hitLocation, launchSpeed);
 }
 
 void ATank::Fire() {
 
 	bool isReloaded = (FPlatformTime::Seconds() - lastFiringTime) > reloadTimeInSeconds;
-	if(barrel && isReloaded) { 
+	if(ensure(barrel && isReloaded)) { 
 		//spawn projectile at socket of barrel
 		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(projectileBP, barrel->GetSocketLocation(FName("ProjectileLaunchSocket")), barrel->GetSocketRotation(FName("ProjectileLaunchSocket")));
 		projectile->LaunchProjectile(launchSpeed);

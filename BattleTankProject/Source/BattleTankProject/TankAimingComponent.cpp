@@ -24,7 +24,7 @@ void UTankAimingComponent::Initialize(UTankBarrel* barrel, UTankTurret* turret) 
 
 
 void UTankAimingComponent::AimAt(FVector hitLocation, float launchSpeed) {
-	if(!barrel || !turret) { return; }
+	if(!ensure(barrel && turret)) { return; }
 
 	FVector outLaunchVelocity;
 	FVector startLocation = barrel->GetSocketLocation(FName("ProjectileLaunchSocket"));
@@ -46,20 +46,19 @@ void UTankAimingComponent::AimAt(FVector hitLocation, float launchSpeed) {
 		auto aimDirection = outLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(aimDirection);
 		MoveTurretTowards(aimDirection);
-		//UE_LOG(LogTemp, Warning, TEXT("%f: aim solution found at %s"), GetWorld()->GetTimeSeconds(), *aimDirection.ToString());
-	} else {
-		//UE_LOG(LogTemp, Warning, TEXT("%f: no aim solution found"), GetWorld()->GetTimeSeconds());
-	}
+	} 
 
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector aimDirection) {
-	if(!barrel || !turret) { return; }
+	if(!ensure(barrel && turret)) { return; }
+
 	barrel->Elevate(CalculateRotationDelta(aimDirection, turret->GetForwardVector().Rotation()).Pitch);
 }
 
 void UTankAimingComponent::MoveTurretTowards(FVector aimDirection) {
-	if(!turret) { return; }
+	if(!ensure(turret)) { return; }
+
 	turret->Rotate(CalculateRotationDelta(aimDirection, turret->GetForwardVector().Rotation()).Yaw);
 }
 
