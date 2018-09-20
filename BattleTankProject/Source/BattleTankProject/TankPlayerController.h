@@ -7,8 +7,6 @@
 
 #include "TankPlayerController.generated.h"
 
-class ATank;
-
 /*
 * Responsible for helping the player aim
 */
@@ -18,11 +16,9 @@ class BATTLETANKPROJECT_API ATankPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 protected:
-	UFUNCTION(BluePrintCallable, Category = "Setup")
-		ATank* GetControlledTank() const;
-
 	UFUNCTION(BluePrintImplementableEvent, Category = "Setup")
 		void FoundAimingComponent(UTankAimingComponent* AimCompRef);
+
 private:
 	
 	void AimTowardsCrosshair();

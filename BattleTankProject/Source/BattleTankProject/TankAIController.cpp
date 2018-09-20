@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAIController.h"
+#include "TankAimingComponent.h"
 #include "Engine/World.h"
-#include "Tank.h"
 
 void ATankAIController::BeginPlay() {
 	Super::BeginPlay();
@@ -11,18 +11,18 @@ void ATankAIController::BeginPlay() {
 void ATankAIController::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 
-	ATank* controlledTank = Cast<ATank>(GetPawn());
-	ATank* playerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	auto playerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 
-	if(playerTank) {
-		//move towards player (passes input to pathfinding logic)
-		MoveToActor(playerTank, acceptanceRadius); //TODO check radius is in cm
-		UE_LOG(LogTemp, Warning, TEXT("MoveToActor called to position: %s"), *playerTank->GetActorLocation().ToString());
+	AActor* playerActor = GetWorld()->GetFirstPlayerController()->GetPawn();
 
-		//Aim towards the player
-		controlledTank->AimAt(playerTank->GetActorLocation());
+	if(!ensure(playerTank && GetPawn())) { return; }
+	//move towards player (passes input to pathfinding logic)
+	MoveToActor(playerActor, acceptanceRadius); //TODO check radius is in cm
 
-		//fire 
-		controlledTank->Fire(); //TODO limit firing rate
-	}
+	auto aimingComp = GetPawn()->FindComponentByClass<UTankAimingComponent>(); //TODO refactor this to constructor
+	if(!ensure(aimingComp)) { return; }
+	//Aim towards the player
+	aimingComp->AimAt(playerActor->GetActorLocation());
+
+	aimingComp->Fire(); //TODO limit firing rate
 }
