@@ -37,7 +37,7 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-		EFiringState firingState = EFiringState::Locked; //in protected because BP is subclass
+		EFiringState firingState = EFiringState::Reloading; //in protected because BP is subclass
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
@@ -51,11 +51,18 @@ private:
 
 	double lastFiringTime = 0;
 
+	FVector aimDirection;
+
 	UTankBarrel* barrel = nullptr;
 	UTankTurret* turret = nullptr;
 
 	void MoveBarrelTowards(FVector aimDirection);
 	void MoveTurretTowards(FVector aimDirection);
+
+	bool IsBarrelMoving() const;
+
+	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
 	//calculate difference between aiming and mesh
 	FRotator CalculateRotationDelta(FVector aimDirection, FRotator meshRotation);
